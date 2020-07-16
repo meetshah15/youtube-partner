@@ -11,23 +11,6 @@ from youtube_api import get_authenticated_services, get_content_owner_id, parse_
     set_asset_ownership, claim_video, set_advertising_options, upload_thumbnail
 
 
-def kill_ffmpeg_process(list_of_clips):
-    for index_, ele in enumerate(list_of_clips):
-        try:
-            try:
-                ele.close()
-            #                 logging.info(ele, 'killed')
-            except:
-                pass
-            try:
-                ele.reader = None
-            except:
-                pass
-        except Exception as e:
-            pass
-    return
-
-
 def post_on_youtube_monitised(json_data):
 
     try:
@@ -94,5 +77,20 @@ def post_on_youtube_monitised(json_data):
 
         return False
     except Exception as e:
-        log.exception(e)
         raise e
+
+
+def kill_ffmpeg_process(list_of_clips):
+    for index_, ele in enumerate(list_of_clips):
+        try:
+            try:
+                ele.close()
+            except:
+                pass
+            try:
+                ele.reader = None
+            except:
+                pass
+        except Exception as e:
+            pass
+    return

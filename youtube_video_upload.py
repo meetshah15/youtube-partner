@@ -51,7 +51,7 @@ RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, http.client.NotConnecte
   http.client.ResponseNotReady, http.client.BadStatusLine)
 
 class YoutubeUpload():
-    CLIENT_SECRETS_FILE = '../../invideo_social/client_secrets.json'
+    CLIENT_SECRETS_FILE = 'YOUR CLIENT SECRET'
     VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
 
 
@@ -259,8 +259,6 @@ class YoutubeUpload():
         return video_id
 
     def download_video(self,video_name, link):
-
-        # VIDEO_FILENAME = "./invideoapp/invideo_social/" + video_name + 'youtube' + '_video.mp4'
 
         VIDEO_FILENAME = video_name+'_test_video.mp4'
         # urlretrieve(link, VIDEO_FILENAME)
