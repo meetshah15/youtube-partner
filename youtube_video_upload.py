@@ -1,5 +1,4 @@
 import logging
-import json
 import http.client
 import httplib2
 import os
@@ -11,8 +10,6 @@ import googleapiclient.discovery
 import requests
 from apiclient.errors import HttpError
 from apiclient.http import MediaFileUpload
-from urllib.request import urlretrieve
-from oauth2client.tools import argparser, run_flow
 import google.oauth2.credentials
 log = logging.getLogger(__name__)
 
@@ -46,14 +43,14 @@ VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 
 RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, http.client.NotConnected,
-  http.client.IncompleteRead, http.client.ImproperConnectionState,
-  http.client.CannotSendRequest, http.client.CannotSendHeader,
-  http.client.ResponseNotReady, http.client.BadStatusLine)
+                        http.client.IncompleteRead, http.client.ImproperConnectionState,
+                        http.client.CannotSendRequest, http.client.CannotSendHeader,
+                        http.client.ResponseNotReady, http.client.BadStatusLine)
+
 
 class YoutubeUpload():
     CLIENT_SECRETS_FILE = 'YOUR CLIENT SECRET'
     VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
-
 
     def get_credentials(self, client_secret_file):
         with open(pwd + '/' + client_secret_file, 'r') as f:
@@ -69,10 +66,8 @@ class YoutubeUpload():
         return client_secret_json
 
     def get_authenticated_service(self, client_secret_json):
-        # print(client_secret_json)
         credentials = google.oauth2.credentials.Credentials(
             **client_secret_json)
-        print(credentials)
         client = googleapiclient.discovery.build(
             YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, credentials=credentials, cache_discovery=False)
 
@@ -81,7 +76,6 @@ class YoutubeUpload():
         return client, youtube_partner
 
     def initialize_upload(self, youtube, options):
-        print("initialize upload")
         tags = None
         if options.keywords:
             tags = options.keywords.split(",")
@@ -115,7 +109,6 @@ class YoutubeUpload():
             # 1024 * 1024 (1 megabyte).
             media_body=MediaFileUpload(options.file, chunksize=-1, resumable=True)
         )
-        print("initalized")
         return insert_request
 
     def upload_thumbnail(self, youtube, video_id, file):
@@ -172,7 +165,7 @@ class YoutubeUpload():
         return good_kwargs
 
     def playlists_list_by_channel_id(self, client, **kwargs):
-        # See full sample for function
+
         kwargs = self.remove_empty_kwargs(**kwargs)
 
         response = client.playlists().list(
@@ -183,10 +176,9 @@ class YoutubeUpload():
         return response
 
     def playlist_items_insert(self, youtube, properties, **kwargs):
-        # See full sample for function
+
         resource = self.build_resource(properties)
 
-        # See full sample for function
         kwargs = self.remove_empty_kwargs(**kwargs)
 
         response = youtube.playlistItems().insert(
@@ -219,17 +211,16 @@ class YoutubeUpload():
         # Normally this is what you want, but if you authorize with a Google Account
         # that has access to multiple YouTube content owner accounts, you need to
         # iterate through the results.
+
         return content_owners_list_response["items"][0]["id"]
 
     def resumable_upload(self, insert_request):
         response = None
         error = None
         retry = 0
-        print('resumable upload')
         video_id = ""
         while response is None:
             try:
-                print("Uploading file...")
                 status, response = insert_request.next_chunk()
                 if 'id' in response:
                     print("Video id '%s' was successfully uploaded." % response['id'])
@@ -253,7 +244,6 @@ class YoutubeUpload():
 
                 max_sleep = 2 ** retry
                 sleep_seconds = random.random() * max_sleep
-                print("Sleeping %f seconds and then retrying..." % sleep_seconds)
                 time.sleep(sleep_seconds)
 
         return video_id
@@ -261,8 +251,6 @@ class YoutubeUpload():
     def download_video(self,video_name, link):
 
         VIDEO_FILENAME = video_name+'_test_video.mp4'
-        # urlretrieve(link, VIDEO_FILENAME)
-
         r = requests.get(link)
         if r.status_code == 200:
             with open(VIDEO_FILENAME, 'wb') as f:
@@ -274,6 +262,5 @@ class YoutubeUpload():
 
     def delete_video(self, video_name):
         os.remove(video_name)
-        print("deleted")
         return
 
