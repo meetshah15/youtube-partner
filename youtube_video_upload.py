@@ -277,35 +277,3 @@ class YoutubeUpload():
         print("deleted")
         return
 
-
-if __name__ == '__main__':
-    youtubeUpload = YoutubeUpload()
-    temp_video = youtubeUpload.download_video('D for Delhi', 'https://s3.ap-south-1.amazonaws.com/ttv-videos/297___358_1527786204974final_1527786380747.mp4')
-    client_secret_json = youtubeUpload.get_credentials('client_secret_installed.json')
-    print(client_secret_json)
-    client_secret_json['token'] = "ya29.GmQDBmdmXAgYSQxM6OSRF415A_HSWOPZqGbdzpdhu7pcEAGDHLQbkBEcXJgW8nr9M_3Gb4Yqrww4BPfRVdCpHdz1J3P5JNqMicITTmSsN6AFtnR5C25Iz2hEz4iG6kLlHXCO-bEw"
-    client_secret_json['refresh_token'] = "AGdpqew9NEu1brTqIcz7i9vDS4-Sp0NR4i01N0nA9DwZ6XWfeJ4TRQ6tjcMQOLQ1cbbpTtH8ReRyosFrryWE0rCA4_krlbj7hoB-E9Ug3Buhz04OhCwpaXlyH5JuV2owdj6x-kSHBSgbcKfDanlxC73aJCEcyvTESkN3e0tnxlgK2FzgiUOPvdBydk_U8rOhQG_IWug07-J4rSQfFqU0poyA_vw8sLOboc4vphRC0mLhrrYHnHgQV0aZ4_sRQx_xyO1lO9QGYeNFNemZ-jO0dJz5w3PaEC-bphFjjH1ke1h68tO6Sn9ZYdyUMHajBgZ6fTN9OQjn7iduw2Y_0upXS_SbVSilOu7rzxmzHaJsMH7uv20OPbDTJ4o"
-    print(client_secret_json)
-    youtube, youtube_partner = youtubeUpload.get_authenticated_service(client_secret_json)
-    argparser.add_argument("--file", required=True, help="Video file to upload")
-    argparser.add_argument("--title", help="Video title", default="Test Title")
-    argparser.add_argument("--description", help="Video description",
-                           default="Test Description")
-    argparser.add_argument("--category", default="22",
-                           help="Numeric video category. " +
-                                "See https://developers.google.com/youtube/v3/docs/videoCategories/list")
-    argparser.add_argument("--keywords", help="Video keywords, comma separated",
-                           default="")
-    argparser.add_argument("--privacyStatus", choices=VALID_PRIVACY_STATUSES,
-                           default=VALID_PRIVACY_STATUSES[0], help="Video privacy status.")
-    args = argparser.parse_args(['--file', temp_video, '--title', '', '--description', ''])
-
-    if not os.path.exists(args.file):
-        exit("Please specify a valid file using the --file= parameter.")
-
-    try:
-        insert_req = youtubeUpload.initialize_upload(youtube, args)
-        youtubeUpload.resumable_upload(insert_req)
-        youtubeUpload.delete_video('D for Delhi')
-    except HttpError as e:
-        print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
