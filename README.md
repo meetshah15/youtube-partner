@@ -5,9 +5,7 @@ Python script to upload videos to youtube using youtube [API](https://developers
 
 ## Dependencies
 
-```python
-Python 2.6/2.7/3x http://www.python.org/
-```
+* [Python 2.6/2.7/3x](http://www.python.org/)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
