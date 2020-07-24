@@ -93,7 +93,7 @@ def parse_options(temp_video, video_title, video_description, keywords, channel_
 
 
 def get_credentials():
-  with open("devops/auto_upload_to_youtube.py-oauth2.json", 'r') as f:
+  with open("oauth2.json", 'r') as f:
     json_ = json.load(f)
     credentials = client.Credentials.new_from_json(json_)
   return credentials
