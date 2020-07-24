@@ -26,7 +26,7 @@ def post_on_youtube_monitised(json_data):
         policy_id = json_data['policy_id']
 
         youtubeUpload = video_upload.YoutubeUpload()
-        temp_video = youtubeUpload.download_video("news18",
+        temp_video = youtubeUpload.download_video("video-name",
                                                   video_url)
 
         parser = argparse.ArgumentParser(parents=[tools.argparser])
