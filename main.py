@@ -17,13 +17,13 @@ def post_on_youtube_monitised(json_data):
 
         pwd = os.path.dirname(os.path.abspath(__file__))
 
-        video_title = json_data['video_title']
-        video_description = json_data['video_description']
-        video_url = json_data['video_url']
-        keywords = json_data['keywords']
-        channel_id = json_data['channel_id']
-        playlist = json_data['playlist']
-        policy_id = json_data['policy_id']
+        video_title = json_data.get('video_title', '')
+        video_description = json_data.get('video_description', '')
+        video_url = json_data.get('video_url', '')
+        keywords = json_data.get('keywords','')
+        channel_id = json_data.get('channel_id','')
+        playlist = json_data.get('playlist','')
+        policy_id = json_data.get('policy_id','')
 
         youtubeUpload = video_upload.YoutubeUpload()
         temp_video = youtubeUpload.download_video("video-name",
